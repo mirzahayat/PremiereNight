@@ -3,6 +3,7 @@ import React, { useMemo, useState, useCallback } from 'react';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 import { selectMovieList } from '../../shared/redux/reducers/movieSlice';
 import { Movie } from '../../types/movie';
+import { mapGenreIdsToNames } from '@utils/genres';
 import MovieList from '@components/movieList/index';
 import {
   searchMovies,
@@ -43,6 +44,7 @@ const useHook = () => {
   }, [movieList]);
 
   const normalizedQuery = query.trim();
+  const normalizedQueryLc = normalizedQuery.toLowerCase();
 
   const data: Movie[] = useMemo(() => {
     if (!normalizedQuery) return allMovies;
@@ -52,8 +54,25 @@ const useHook = () => {
   const getsearchList = async () => {
     try {
       setLoading(true);
-      const results = await searchMovies(normalizedQuery);
-      setList(results || []);
+      // Remote title/keyword search
+      const apiResults = await searchMovies(normalizedQuery);
+      // Local genre search
+      const genreMatches = allMovies.filter(m =>
+        mapGenreIdsToNames(m.genre_ids).some(name =>
+          String(name || '').toLowerCase().includes(normalizedQueryLc),
+        ),
+      );
+      // Merge and dedupe by id
+      const merged: Movie[] = [];
+      const seen = new Set<number>();
+      for (const item of [...(apiResults || []), ...genreMatches]) {
+        const id = Number(item?.id);
+        if (!seen.has(id)) {
+          seen.add(id);
+          merged.push(item);
+        }
+      }
+      setList(merged);
     } finally {
       setLoading(false);
     }
