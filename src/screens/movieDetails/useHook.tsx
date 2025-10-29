@@ -17,6 +17,7 @@ import { styles } from './styles';
 type MovieDetailsRoute = { params: { movie: Movie } };
 const useHook = ({ route }: { route?: MovieDetailsRoute['params'] | any }) => {
   const { movie } = route.params as { movie: Movie };
+  const [loading, setLoading] = useState(false);
   const [detail, setDetail] = useState<Movie | null>(movie || null);
   const [actors, setActors] = useState<any[]>([]);
   const isInWatchlist = useSelector((s: any) =>
@@ -24,8 +25,13 @@ const useHook = ({ route }: { route?: MovieDetailsRoute['params'] | any }) => {
   );
 
   const getMovieDetail = async () => {
-    const res = await getMoviesDetail(movie.id);
-    setDetail(res);
+    try {
+      setLoading(true);
+      const res = await getMoviesDetail(movie.id);
+      setDetail(res);
+    } finally {
+      setLoading(false);
+    }
   };
   const getMovieActors = async () => {
     const res = await getMoviesActors(movie.id);
@@ -37,6 +43,7 @@ const useHook = ({ route }: { route?: MovieDetailsRoute['params'] | any }) => {
   }, []);
 
   const renderItem = useCallback(({ item }: any) => {
+
     return (
       <View style={styles.actorCon}>
         <FastImage
@@ -45,12 +52,16 @@ const useHook = ({ route }: { route?: MovieDetailsRoute['params'] | any }) => {
           }}
           style={styles.actorProfile}
         />
-        <Text style={styles.actor}>{item?.name}</Text>
+        <Text
+          style={styles.actor}
+        >
+          {item?.name}
+        </Text>
       </View>
     );
   }, []);
 
-  return { movie: detail || movie, isInWatchlist, actors, renderItem };
+  return { movie: detail || movie, isInWatchlist, actors, loading, renderItem };
 };
 
 //make this component available to the app
