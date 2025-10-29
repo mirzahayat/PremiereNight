@@ -7,8 +7,6 @@ export const getAllMovieLists = async () => {
       categories.map(category => getMovieList({ moviePath: category })),
     );
 
-    console.log("ashjdvbjasdva",nowPlaying);
-    
     return {
       NowPlaying: nowPlaying,
       Popular: popular,
@@ -25,6 +23,12 @@ export const getAllMovieLists = async () => {
 export const getMovieList = async ({ moviePath }) => {
   const response = await HTTP_CLIENT.get(
     `${endPint.movie}/${moviePath}?api_key=${API_KEY}`,
+  );
+  return response.data.results;
+};
+export const searchMovies = async (params) => {
+  const response = await HTTP_CLIENT.get(
+    `${endPint.search}?api_key=${API_KEY}&query=${encodeURIComponent(params)}`,
   );
   return response.data.results;
 };
