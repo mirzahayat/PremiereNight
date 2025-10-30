@@ -28,3 +28,23 @@ export const getMovieList = async ({ moviePath }) => {
   );
   return response.data.results;
 };
+
+export const searchMovies = async (params) => {
+  const response = await HTTP_CLIENT.get(
+    `${endPint.search}?api_key=${API_KEY}&query=${encodeURIComponent(params)}`,
+  );
+  return response.data.results;
+};
+
+export const getMoviesDetail = async (id) => {
+  const response = await HTTP_CLIENT.get(
+    `${endPint.movie}/${id}?api_key=${API_KEY}`,
+  );
+  return response.data;
+};
+export const getMoviesActors = async (id) => {
+  const response = await HTTP_CLIENT.get(
+    `${endPint.movie}/${id}/credits?api_key=${API_KEY}`,
+  );
+  return response.data;
+};

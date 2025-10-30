@@ -34,9 +34,9 @@ const useHook = () => {
   }, []);
 
   useEffect(() => {}, [movieList]);
-  const onRefresh = () => {
+  const onRefresh=()=>{
     fetchMovies();
-  };
+  }
 
   const fetchMovies = async () => {
     setLoading(true);
@@ -58,15 +58,7 @@ const useHook = () => {
   );
 
   // Memoized empty component
-  return {
-    loading,
-    nowPlaying,
-    popular,
-    topRated,
-    upcoming,
-    renderItem,
-    onRefresh,
-  };
+  return { loading, nowPlaying, popular, topRated, upcoming, renderItem ,onRefresh};
 };
 
 //make this component available to the app

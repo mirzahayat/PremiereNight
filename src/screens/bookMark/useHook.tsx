@@ -29,7 +29,7 @@ const useHook = () => {
         </Text>
       </View>
     ),
-    [dispatch],
+    [dispatch], // dependencies
   );
 
   return { renderItem, watchlist };
