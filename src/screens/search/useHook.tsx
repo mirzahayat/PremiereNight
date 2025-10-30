@@ -2,10 +2,13 @@
 import React, { useMemo, useState, useCallback } from 'react';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 import { selectMovieList } from '../../shared/redux/reducers/movieSlice';
-import { mapGenreIdsToNames } from '@utils/genres';
 import { Movie } from '../../types/movie';
-import { View } from 'react-native';
+import { mapGenreIdsToNames } from '@utils/genres';
 import MovieList from '@components/movieList/index';
+import {
+  searchMovies,
+} from '../../shared/services/movieServices';
+import useDebounce from '../../shared/hook/useDebouce/index';
 
 // create a component
 const useHook = () => {
@@ -18,6 +21,8 @@ const useHook = () => {
   };
 
   const [query, setQuery] = useState<string>('');
+  const [list, setList] = useState<Movie[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
   const allMovies: Movie[] = useMemo(() => {
     const combined = [
@@ -38,23 +43,57 @@ const useHook = () => {
     return unique;
   }, [movieList]);
 
-  const normalizedQuery = query.trim().toLowerCase();
+  const normalizedQuery = query.trim();
+  const normalizedQueryLc = normalizedQuery.toLowerCase();
 
   const data: Movie[] = useMemo(() => {
     if (!normalizedQuery) return allMovies;
-    return allMovies.filter((m: Movie) => {
-      const title = String(m.title || m.original_title || '').toLowerCase();
-      if (title.includes(normalizedQuery)) return true;
-      const genreNames = mapGenreIdsToNames(m.genre_ids);
-      return genreNames.some(name =>
-        name.toLowerCase().includes(normalizedQuery),
+    return list;
+  }, [allMovies, list, normalizedQuery]);
+
+  const getsearchList = async () => {
+    try {
+      setLoading(true);
+      // Remote title/keyword search
+      const apiResults = await searchMovies(normalizedQuery);
+      // Local genre search
+      const genreMatches = allMovies.filter(m =>
+        mapGenreIdsToNames(m.genre_ids).some(name =>
+          String(name || '').toLowerCase().includes(normalizedQueryLc),
+        ),
       );
-    });
-  }, [allMovies, normalizedQuery]);
+      // Merge and dedupe by id
+      const merged: Movie[] = [];
+      const seen = new Set<number>();
+      for (const item of [...(apiResults || []), ...genreMatches]) {
+        const id = Number(item?.id);
+        if (!seen.has(id)) {
+          seen.add(id);
+          merged.push(item);
+        }
+      }
+      setList(merged);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useDebounce(
+    () => {
+      if (normalizedQuery) {
+        getsearchList();
+      } else {
+        setList([]);
+      }
+    },
+    [normalizedQuery],
+    300,
+  );
+
   const renderItem = useCallback(
     ({ item }: { item: Movie }) => <MovieList item={item} />,
     [dispatch], // dependencies
   );
+
   return { data, query, setQuery, renderItem };
 };
 
