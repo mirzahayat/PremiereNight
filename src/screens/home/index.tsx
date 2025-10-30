@@ -11,6 +11,7 @@ import { useHook } from './useHook';
 import { Poster } from '@components/homePoster';
 import React from 'react';
 import { MovieCarousels } from '@components/movieCarousels';
+import CustomLoading from '../../shared/components/customLoading/index';
 
 // create a component
 const Home = () => {
@@ -24,8 +25,8 @@ const Home = () => {
     onRefresh,
   } = useHook();
   return (
-    <Wrapper noPaddingTop>
-      {loading && <ActivityIndicator size={'large'} />}
+    <Wrapper noPaddingTop noPaddingBottom>
+      {loading && <CustomLoading />}
       <ScrollView
         contentContainerStyle={{ paddingBottom: IOS ? 0 : RFValue(10) }}
         showsVerticalScrollIndicator={false}
