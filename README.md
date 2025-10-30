@@ -38,6 +38,26 @@ npm run ios
 ```
 If the Simulator doesn’t open, run from Xcode using `ios/PremiereNight.xcworkspace`.
 
+## Testing
+The project uses Jest for unit testing React Native components. Test files are located in `__tests__/` directories alongside the components.
+
+Run all tests:
+```bash
+npm test
+```
+
+Run tests with coverage:
+```bash
+npm test -- --config jest.config.js
+```
+
+Run specific test file:
+```bash
+npm test -- --testPathPattern=Home.test.tsx
+```
+
+The tests cover the main screens: Home, BookMark, Search, and MovieDetails, using mocked hooks and components to ensure isolated unit testing.
+
 ## Architecture, trade‑offs, assumptions
 - Navigation: React Navigation bottom tabs + native stack for details.
 - State: Redux Toolkit + redux‑persist; watchlist stored as id→movie map for O(1) membership checks.
