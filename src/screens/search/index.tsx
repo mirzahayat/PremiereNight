@@ -9,14 +9,15 @@ import { PlaceHolder } from '@utils/constants';
 const Search = () => {
   const { data, query, setQuery, renderItem } = useHook();
   return (
-    <Wrapper noPaddingTop={false}>
-      <Header title={PlaceHolder.search} />
-      <SearchInput searchQuery={query} setSearchQuery={setQuery} />
+    <Wrapper noPaddingTop={false} testID="search-screen">
+      <Header title={PlaceHolder.search} testID="search-header" />
+      <SearchInput searchQuery={query} setSearchQuery={setQuery} testID="search-input" />
       <FlashList
         data={data}
         horizontal={false}
         renderItem={renderItem}
         contentContainerStyle={{ marginRight: RF(110), marginTop: RF(10) }}
+        testID="search-flashlist"
       />
     </Wrapper>
   );

@@ -10,9 +10,11 @@ const FlashList = ({
   renderItem,
   horizontal = true,
   contentContainerStyle,
+  testID,
 }: any) => {
   return (
     <FlatList
+      testID={testID}
       horizontal={horizontal}
       showsHorizontalScrollIndicator={false}
       data={data}

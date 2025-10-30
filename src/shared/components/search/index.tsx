@@ -5,9 +5,9 @@ import { styles } from './styles';
 import { PlaceHolder } from '@utils/constants';
 import { COLORS } from '@theme/colors';
 // create a component
-const SearchInput = ({ searchQuery, setSearchQuery }: any) => {
+const SearchInput = ({ searchQuery, setSearchQuery, testID }: any) => {
   return (
-    <View style={styles.searchContainer}>
+    <View style={styles.searchContainer} testID={testID}>
       <View style={styles.searchInputContainer}>
         <Text style={styles.searchIcon}>🔍</Text>
         <TextInput

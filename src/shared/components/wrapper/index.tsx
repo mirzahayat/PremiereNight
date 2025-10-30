@@ -12,6 +12,7 @@ interface Props {
   noPaddingBottom: any;
   bgColor?: string;
   barStyle: 'dark-content' | 'default' | 'light-content';
+  testID?: string;
 }
 const Wrapper = ({
   barStyle = 'dark-content',
@@ -19,6 +20,7 @@ const Wrapper = ({
   noPaddingTop,
   noPaddingBottom,
   bgColor = WHITE,
+  testID,
 }: Partial<Props>) => {
   const insets = useSafeAreaInsets();
   const paddingTop = noPaddingTop ? 0 : insets.top;
@@ -32,6 +34,7 @@ const Wrapper = ({
         backgroundColor="transparent"
       />
       <View
+        testID={testID}
         style={[
           styles.container,
           {

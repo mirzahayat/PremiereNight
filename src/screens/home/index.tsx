@@ -25,7 +25,7 @@ const Home = () => {
     onRefresh,
   } = useHook();
   return (
-    <Wrapper noPaddingTop noPaddingBottom>
+    <Wrapper noPaddingTop noPaddingBottom testID="home-screen">
       {loading && <CustomLoading />}
       <ScrollView
         contentContainerStyle={{ paddingBottom: IOS ? 0 : RFValue(10) }}

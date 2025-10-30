@@ -3,9 +3,9 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { HP } from '@theme/responsive';
 // create a component
-const Header = ({ title }: { title: string }) => {
+const Header = ({ title, testID }: { title: string; testID?: string }) => {
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID={testID}>
       <Text style={styles.text}>{title}</Text>
     </View>
   );

@@ -9,13 +9,14 @@ const BookMark = () => {
   const { renderItem, watchlist } = useHook();
 
   return (
-    <Wrapper noPaddingTop={false}>
-      <Header title={PlaceHolder.BookMark} />
+    <Wrapper noPaddingTop={false} testID="bookmark-screen">
+      <Header title={PlaceHolder.BookMark} testID="bookmark-header" />
       <FlashList
         data={watchlist}
         horizontal={false}
         renderItem={renderItem}
         contentContainerStyle={{ marginRight: RF(110), marginTop: RF(10) }}
+        testID="bookmark-flashlist"
       />
     </Wrapper>
   );

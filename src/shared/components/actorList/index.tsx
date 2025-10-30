@@ -13,7 +13,7 @@ const ActorList = ({ actors, renderItem }: any) => {
         data={actors}
         horizontal
         showsHorizontalScrollIndicator={false}
-        keyExtractor={(_, index) => index?.toString()}
+        keyExtractor={(_, index) => _+index?.toString()}
         renderItem={renderItem}
       />
     </View>

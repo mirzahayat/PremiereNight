@@ -9,7 +9,7 @@ import { DetailsCard } from './detailsCard';
 import { Card } from './card';
 import { PlaceHolder } from '@utils/constants';
 import { ActorList } from '@components/actorList';
-import CustomLoading from '../../shared/components/customLoading/index';
+import CustomLoading from '@components/customLoading/index';
 // create a component
 type MovieDetailsRoute = { params: { movie: Movie } };
 const MovieDetails = ({
@@ -21,7 +21,7 @@ const MovieDetails = ({
     route,
   });
   return (
-    <Wrapper noPaddingTop={true}>
+    <Wrapper noPaddingTop={true} testID="movie-details-screen">
       {loading && <CustomLoading />}
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
